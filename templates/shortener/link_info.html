@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Short URL Report for {{ link.url }} {% endblock %}
+
+{% block content %}
+<h2>Click Report for <a href="{{ link.short_url }}">{{ link.url }}</a></h2>
+<h3>Submitted on: {{ link.date_submitted|date:"M d, Y" }}</h3>
+<ul>
+    <li>Clicks:{{link.total_clicks}}</li>
+    <li>Views:{{link.total_views}}</li>
+</ul>
+<table>
+    <thead>
+        <tr>
+            <th>Date/Time</th>
+            <th>Type</th>
+            <th>Referer</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stat in link.stat_set.all %}
+            <tr>
+                <td>{{stat.date}}</td>
+                <td>{{stat.get_stat_type_display}}</td>
+                <td>{{stat.http_referer}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
