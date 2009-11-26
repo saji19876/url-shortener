@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate
 from django.views.generic import list_detail
 from django.shortcuts import get_object_or_404, get_list_or_404, render_to_response
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect,HttpResponseForbidden,HttpResponseBadRequest
+
 from django.utils import simplejson
 from django.template import RequestContext
 from django.views.decorators.http import require_POST
@@ -113,7 +114,7 @@ def user(request,user_id = None, username =  None):
         'shortener/user/main.html',
         values,
         context_instance=RequestContext(request))
-        
+
 def index(request):
     """
     View for main page (lists recent and popular links)
@@ -154,9 +155,4 @@ def shorten(request,url = None):
     link = Link.objects.create_link(url, user_p.user)
     
     return HttpResponse(link.short_url())
-        
-        
-        
-        
-        
-        
+

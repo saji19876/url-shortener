@@ -2,6 +2,7 @@ import datetime
 
 from django.db import models
 from django.conf import settings
+<<<<<<< HEAD
 from django.contrib.auth.models import User
 from django import forms
 from django.db.models.signals import post_save
@@ -45,6 +46,13 @@ class LinkManager(models.Manager):
         link = new_link
         
         return link
+=======
+#from django.contrib.auth.models import User
+from django import forms
+
+from urlweb.shortener.baseconv import base62
+
+>>>>>>> 8447a4f298bf1eb8bbeb5df2011adda9e86aabe4
 class Link(models.Model):
     """
     Model that represents a shortened URL
@@ -79,15 +87,23 @@ class Link(models.Model):
     1
 
     """
+<<<<<<< HEAD
     user = models.ForeignKey(User)
     url = models.URLField(verify_exists=True, unique=False)
     date_submitted = models.DateTimeField(default=datetime.datetime.now())
     main_url = models.ForeignKey("self",related_name="rollup",blank=True,null=True)
+=======
+    url = models.URLField(verify_exists=True, unique=True)
+    date_submitted = models.DateTimeField(default=datetime.datetime.now())
+    usage_count = models.IntegerField(default=0)
+
+>>>>>>> 8447a4f298bf1eb8bbeb5df2011adda9e86aabe4
     def to_base62(self):
         return base62.from_decimal(self.id)
 
     def short_url(self):
         return settings.SITE_BASE_URL + self.to_base62()
+<<<<<<< HEAD
         
     def total_views(self):
         return self.stat_set.filter(stat_type=2).count()
@@ -115,6 +131,12 @@ class Stat(models.Model):
     date  = models.DateTimeField(default=datetime.datetime.now())
     stat_type = models.IntegerField(default=1, choices=STAT_TYPE_CHOICES)
     
+=======
+    
+    def __unicode__(self):
+        return self.to_base62() + ' : ' + self.url
+
+>>>>>>> 8447a4f298bf1eb8bbeb5df2011adda9e86aabe4
 class LinkSubmitForm(forms.Form):
     u = forms.URLField(verify_exists=True,
                        label='URL to be shortened:',

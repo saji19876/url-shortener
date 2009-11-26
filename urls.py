@@ -10,6 +10,7 @@ urlpatterns = patterns(
     (r'^admin/(.*)', admin.site.root),    
     (r'^submit/$', 'shortener.views.submit'),
     (r'^(?P<base62_id>\w+)$', 'shortener.views.follow'),
+<<<<<<< HEAD
     (r'^info/(?P<base62_id>\w+)$', 'shortener.views.info'),   
     (r'^(?P<stat_type>v)/(?P<base62_id>\w+)$', 'shortener.views.follow'),
     (r'^(?P<user_id>\d+)/(?P<username>\w+)$', 'shortener.views.user'),
@@ -17,6 +18,10 @@ urlpatterns = patterns(
     # API
     (r'^api/v1/shorten$', 'shortener.views.shorten'),
     (r'^api/v1/expand$', 'shortener.views.shorten'),
+=======
+    (r'^info/(?P<base62_id>\w+)$', 'shortener.views.info'),    
+
+>>>>>>> 8447a4f298bf1eb8bbeb5df2011adda9e86aabe4
     (r'^static/(?P<path>.*)$', 'django.views.static.serve',
       {'document_root': settings.STATIC_DOC_ROOT}),
 )

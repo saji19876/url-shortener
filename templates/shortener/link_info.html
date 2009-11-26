@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+<<<<<<< HEAD
 {% block title %}Short URL Report for {{ link.url }} {% endblock %}
 
 {% block content %}
@@ -27,4 +28,15 @@
         {% endfor %}
     </tbody>
 </table>
+=======
+{% block title %}Link info{% endblock %}
+
+{% block content %}
+<p>
+<a href="{{ link.short_url }}">{{ link.url }}</a> (Score: {{ link.usage_count }})
+<br/>
+<br/>
+Submitted on: {{ link.date_submitted|date:"M d, Y" }}
+</p>
+>>>>>>> 8447a4f298bf1eb8bbeb5df2011adda9e86aabe4
 {% endblock %}
