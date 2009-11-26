@@ -52,11 +52,7 @@ MEDIA_ROOT = ''
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-<<<<<<< HEAD
 MEDIA_URL = '/static/'
-=======
-MEDIA_URL = ''
->>>>>>> 8447a4f298bf1eb8bbeb5df2011adda9e86aabe4
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -86,7 +82,6 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_PATH, 'templates')    
 )
 
-<<<<<<< HEAD
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.auth",
     "django.core.context_processors.debug",
@@ -96,8 +91,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 AUTH_PROFILE_MODULE = 'shortener.UserProfile'
-=======
->>>>>>> 8447a4f298bf1eb8bbeb5df2011adda9e86aabe4
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -105,10 +98,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'urlweb.shortener',
-<<<<<<< HEAD
     'south'
-=======
->>>>>>> 8447a4f298bf1eb8bbeb5df2011adda9e86aabe4
 )
 
 STATIC_DOC_ROOT = os.path.join(PROJECT_PATH, 'static')
@@ -121,3 +111,8 @@ LOGIN_REDIRECT_URL = '/'
 SITE_NAME = 'localhost:8000'
 SITE_BASE_URL = 'http://' + SITE_NAME + '/'
 REQUIRE_LOGIN = True
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
