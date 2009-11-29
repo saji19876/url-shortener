@@ -134,6 +134,7 @@ def is_allowed_to_submit(request):
     return not settings.REQUIRE_LOGIN or request.user.is_authenticated()
 
 def shorten(request,url = None):
+    from django.utils import simplejson as json
     
     url =  request.GET.get("url", None)
     api_key = request.GET.get("api_key", None)
@@ -154,5 +155,10 @@ def shorten(request,url = None):
 
     link = Link.objects.create_link(url, user_p.user)
     
-    return HttpResponse(link.short_url())
+    json = json.dumps(link.short_url())
+    
+    callback = request.GET.get("callback", None)
+    if callback:
+        json = callback + "("+json+");"
+    return HttpResponse(json,content_type="text/javascript")
 

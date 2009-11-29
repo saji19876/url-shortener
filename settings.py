@@ -52,7 +52,7 @@ MEDIA_ROOT = ''
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/static/'
+MEDIA_URL = '/static'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -74,6 +74,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 #    'django.middleware.transaction.TransactionMiddleware',    
+    'django_authopenid.middleware.OpenIDMiddleware',
 )
 
 ROOT_URLCONF = 'urlweb.urls'
@@ -88,6 +89,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     #"django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "django.core.context_processors.request",
+    "django_authopenid.context_processors.authopenid",
 )
 
 AUTH_PROFILE_MODULE = 'shortener.UserProfile'
@@ -98,7 +100,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'urlweb.shortener',
-    'south'
+    'registration',
+    'django_authopenid',
 )
 
 STATIC_DOC_ROOT = os.path.join(PROJECT_PATH, 'static')

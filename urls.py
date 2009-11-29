@@ -6,6 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
+    (r'^account/', include('django_authopenid.urls')),
     (r'^$', 'shortener.views.index'),    
     (r'^admin/(.*)', admin.site.root),    
     (r'^submit/$', 'shortener.views.submit'),
