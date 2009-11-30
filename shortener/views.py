@@ -42,8 +42,7 @@ def follow(request, base62_id, stat_type = 1):
         http_user_agent = request.META.get("HTTP_USER_AGENT",""),
         remote_addr     = request.META.get("REMOTE_ADDR",""),  
         remote_host     = request.META.get("REMOTE_HOST",""),
-        stat_type       = stat_type,
-        date            = datetime.datetime.now()
+        stat_type       = stat_type
     )
     stat.user = user
     stat.save()

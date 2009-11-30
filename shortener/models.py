@@ -82,7 +82,7 @@ class Link(models.Model):
     """
     user = models.ForeignKey(User)
     url = models.URLField(verify_exists=True, unique=False)
-    date_submitted = models.DateTimeField(default=datetime.datetime.now())
+    date_submitted = models.DateTimeField(auto_now_add=True)
     main_url = models.ForeignKey("self",related_name="rollup",blank=True,null=True)
     
     def to_base62(self):
@@ -114,7 +114,7 @@ class Stat(models.Model):
     http_user_agent = models.TextField(blank=True)
     remote_addr     = models.TextField(blank=True)
     remote_host     = models.TextField(blank=True)
-    date            = models.DateTimeField()
+    date            = models.DateTimeField(auto_now_add=True)
     stat_type       = models.IntegerField(default=1, choices=STAT_TYPE_CHOICES)
     
 
