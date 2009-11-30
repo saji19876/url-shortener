@@ -21,6 +21,8 @@ def follow(request, base62_id, stat_type = 1):
     View which gets the link for the given base62_id value
     and redirects to it.
     """
+    import datetime
+    
     key = base62.to_decimal(base62_id)
     link = get_object_or_404(Link, pk = key)
     if request.user.is_anonymous():
@@ -40,7 +42,8 @@ def follow(request, base62_id, stat_type = 1):
         http_user_agent = request.META.get("HTTP_USER_AGENT",""),
         remote_addr     = request.META.get("REMOTE_ADDR",""),  
         remote_host     = request.META.get("REMOTE_HOST",""),
-        stat_type       = stat_type
+        stat_type       = stat_type,
+        date            = datetime.datetime.now()
     )
     stat.user = user
     stat.save()
@@ -107,7 +110,7 @@ def user(request,user_id = None, username =  None):
     
     values = default_values(request)
     
-    values["links"] = user.link_set.all().order_by("date_submitted")
+    values["links"] = user.link_set.all().order_by("-date_submitted")
     values["user"]  = user
     
     return render_to_response(

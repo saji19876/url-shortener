@@ -114,8 +114,8 @@ class Stat(models.Model):
     http_user_agent = models.TextField(blank=True)
     remote_addr     = models.TextField(blank=True)
     remote_host     = models.TextField(blank=True)
-    date  = models.DateTimeField(default=datetime.datetime.now())
-    stat_type = models.IntegerField(default=1, choices=STAT_TYPE_CHOICES)
+    date            = models.DateTimeField()
+    stat_type       = models.IntegerField(default=1, choices=STAT_TYPE_CHOICES)
     
 
 class LinkSubmitForm(forms.Form):
