@@ -127,11 +127,14 @@ def submit(request):
         context_instance=RequestContext(request))
         
 def user(request,user_id = None, username =  None):
+    import datetime
+    one_week_ago = datetime.datetime.today() - datetime.timedelta(weeks=1)
+    
     user = get_object_or_404(User, pk = user_id)
     
     values = default_values(request)
     
-    values["links"] = user.link_set.all().order_by("-date_submitted")
+    values["links"] = user.link_set.all().order_by("-date_submitted").filter(date_submitted__gte=one_week_ago)
     values["user"]  = user
     
     return render_to_response(

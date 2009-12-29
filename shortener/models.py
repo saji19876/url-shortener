@@ -96,6 +96,14 @@ class Link(models.Model):
         
     def total_clicks(self):
         return self.stat_set.filter(stat_type=1).count()
+        
+    def ctr(self):
+        clicks = float(self.total_clicks())
+        views  = float(self.total_views())
+        if views == 0:
+            return clicks
+            
+        return float(clicks / views)
     
     def __unicode__(self):
         return self.to_base62() + ' : ' + self.url

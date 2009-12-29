@@ -9,24 +9,36 @@
         <h3>API Key: {{request.user.get_profile.api_key}}</h3>
     {% endifequal %}
 {% endif %}
-<table>
+<table id="user_link_data">
     <thead>
         <tr>
             <th>Short</th>
             <th>Long</th>
             <th>Clicks</th>
             <th>Views</th>
+            <th>CTR</th>
         </tr>
     </thead>
     <tbody>
         {% for link in links %}
             <tr>
                 <td>{{link.short_url}}</td>
-                <td>{{link.url}}</td>
+                <td>{{link.url|urlizetrunc:35}}</td>
                 <td>{{link.total_clicks}}</td>
                 <td>{{link.total_views}}</td>
+                <td>{{link.ctr|floatformat:2}}</td>
             </tr>
         {% endfor %}
     </tbody>
 </table>
 {% endblock %}
+
+{% block extra_scripts %}
+<script src="{{MEDIA_URL}}/js/jquery.tablesorter.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function(){ 
+        $("#user_link_data").tablesorter(); 
+    });
+</script>
+{% endblock %}
+
