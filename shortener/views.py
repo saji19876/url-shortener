@@ -15,6 +15,7 @@ from django.conf import settings
 from urlweb.shortener.baseconv import base62
 from urlweb.shortener.models import Link, LinkSubmitForm, Stat,UserProfile
 from django.contrib.auth.models import User
+from django.db.models import Count
 
 def follow(request, base62_id, stat_type = 1):
     """ 
@@ -67,10 +68,31 @@ def info(request, base62_id):
     """
     View which shows information on a particular link
     """
+    from urlparse import urlparse
     key = base62.to_decimal(base62_id)
     link = get_object_or_404(Link, pk = key)
     values = default_values(request)
     values['link'] = link
+    values["stats"] = link.stat_set.all()
+    net_locs = dict()
+    for stat in values["stats"]:
+        if stat.http_referer:
+            o = urlparse(stat.http_referer)
+            ref = str(o.netloc)
+        else:
+            ref = "No Referer"
+        net_locs[ref] = net_locs.get(ref, 0) + 1
+      
+    refs = []
+    counts = [] 
+    domains = []
+    for domain in net_locs:
+        counts.append(net_locs[domain])
+        refs.append(domain)
+        domains.append(dict(domain=domain,count=net_locs[domain]))
+    values["domains"] = domains 
+    values["refs"] = refs
+    values["counts"] = counts    
     return render_to_response(
         'shortener/link_info.html',
         values,
@@ -121,9 +143,10 @@ def index(request):
     """
     View for main page (lists recent and popular links)
     """
+    import datetime
     values = default_values(request)
-    values['recent_links'] = Link.objects.all().order_by('-date_submitted')[0:10]
-    #values['most_popular_links'] = Link.objects.all().order_by('-usage_count')[0:10]
+    values['recent_links'] = Link.objects.all().order_by('-date_submitted')[0:10]    
+    values['most_popular_links'] = Link.objects.filter(date_submitted__gte=(datetime.datetime.today() - datetime.timedelta(days=1)) ).annotate(num_clicks_views=Count('stat')).order_by('-num_clicks_views')[0:10]
     return render_to_response(
         'shortener/index.html',
         values,

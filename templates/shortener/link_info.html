@@ -5,10 +5,36 @@
 {% block content %}
 <h2>Click Report for <a href="{{ link.short_url }}">{{ link.url }}</a></h2>
 <h3>Submitted on: {{ link.date_submitted|date:"M d, Y" }}</h3>
+<div class="yui-g">
+    <div class="yui-u first">
+        {% autoescape off %}
+        <img src="http://chart.apis.google.com/chart?cht=p&chd=t:{{counts|join:","}}&chs=300x100&chl={{refs|join:"|"}}">
+        {% endautoescape%}
+    </div>
+    <div class="yui-u">
+        &nbsp;
+    </div>
+</div>
 <ul>
     <li>Clicks:{{link.total_clicks}}</li>
     <li>Views:{{link.total_views}}</li>
 </ul>
+<table>
+    <thead>
+        <tr>
+            <th>Referer Domain</th>
+            <th>Clicks</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for domain in domains|dictsortreversed:"count" %}
+            <tr>
+                <td>{{domain.domain}}</td>
+                <td>{{domain.count}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 <table>
     <thead>
         <tr>
@@ -27,4 +53,37 @@
         {% endfor %}
     </tbody>
 </table>
+domains:{{domains|pprint}}
+refs:{{refs|pprint}}
+counts:{{counts|pprint}}
+<script src="{{MEDIA_URL}}/js/raphael.js" type="text/javascript" charset="utf-8"></script> 
+<script src="{{MEDIA_URL}}/js/g.raphael-min.js" type="text/javascript" charset="utf-8"></script> 
+<script src="{{MEDIA_URL}}/js/g.pie-min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+window.onload = function () {
+    var r = Raphael("holder");
+    r.g.txtattr.font = "12px 'Fontin Sans', Fontin-Sans, sans-serif";
+    
+    r.g.text(200, 80, "Interactive Pie Chart").attr({"font-size": 20});
+    {% autoescape off %}
+    var pie = r.g.piechart(200, 200, 60, [{{counts|join:","}}], {legend: [{{refs|join:","}}], legendpos: "west", href: ["http://raphaeljs.com", "http://g.raphaeljs.com"]});
+    {% endautoescape%}
+    pie.hover(function () {
+        this.sector.stop();
+        this.sector.scale(1.1, 1.1, this.cx, this.cy);
+        if (this.label) {
+            this.label[0].stop();
+            this.label[0].scale(1.5);
+            this.label[1].attr({"font-weight": 800});
+        }
+    }, function () {
+        this.sector.animate({scale: [1, 1, this.cx, this.cy]}, 500, "bounce");
+        if (this.label) {
+            this.label[0].animate({scale: 1}, 500, "bounce");
+            this.label[1].attr({"font-weight": 400});
+        }
+    });
+    
+};
+</script>
 {% endblock %}

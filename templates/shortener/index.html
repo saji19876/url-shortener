@@ -11,7 +11,7 @@
 <h2 class="s4">Most Popular Links</h2>
 <ul>
 {% for link in most_popular_links %}
-<li><a href="{{ link.short_url }}">{{ link.url }}</a> {link.total_clicks }} Views: {{link.total_views}}
+<li><a href="{{ link.short_url }}">{{ link.url }}</a> Clicks: {{link.total_clicks }} Views: {{link.total_views}}
 
 (<a href="{% url shortener.views.info link.to_base62 %}">Info</a>)</li>
 {% endfor %}
