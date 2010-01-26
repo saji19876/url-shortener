@@ -3,7 +3,7 @@
 {% block title %}Short URL Report for {{ user }} {% endblock %}
 
 {% block content %}
-<h2>Link Report for {{ user }} in Time Period {{totals}}</h2>
+<h2>Link Report for {{ user }} in Time Period {{totals}} {{totals2}}</h2>
 {% if user.is_authenticated %}
     {% ifequal user.id request.user.id %}
         <h3>API Key: {{request.user.get_profile.api_key}}</h3>
