@@ -12,7 +12,7 @@
    {% endblock %}
 </head>
 <body>
-<div id="custom-doc" class="yui-t6">
+<div id="custom-doc" class="yui-t4">
     <div id="hd" role="banner" class="border_bottom">
         <h1 class="s0 replace_font"><a href="/">tskr.us</a></h1>
         {% if user.is_authenticated %}
@@ -33,6 +33,7 @@
             </div>
         </div>
         <div class="yui-b">
+            {% block sidebar %}
             <div class="margin_top_1em margin_bottom_halfem"><em class="s4">User Tools</em></div>
             {% if not user.is_authenticated %}
                 <em class="s5">You must <a href="{% url user_signin %}">sign-in</a> or <a href="{% url user_signin %}">create an account</a> to use this site.</em>
@@ -56,6 +57,7 @@
                 {% endblock %}
                 {% endif %}
             </div>
+            {% endblock %}
         </div>
     </div>
     <div id="ft">

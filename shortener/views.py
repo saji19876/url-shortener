@@ -47,6 +47,11 @@ def follow(request, base62_id, stat_type = 1):
     )
     stat.user = user
     stat.save()
+    if stat_type == 1:
+        link.clicks = link.clicks + 1
+    else:
+        link.views = link.views + 1
+    link.save()
     return HttpResponsePermanentRedirect(link.url)
 
 def default_values(request, link_form=None):
@@ -126,16 +131,24 @@ def submit(request):
         values,
         context_instance=RequestContext(request))
         
-def user(request,user_id = None, username =  None):
+def user(request,user_id = None, username =  None, timeframe = None):
     import datetime
-    one_week_ago = datetime.datetime.today() - datetime.timedelta(weeks=1)
+    if not timeframe:
+        time_delta = datetime.datetime.today() - datetime.timedelta(weeks=1)
+    elif timeframe == "month":
+        time_delta = datetime.datetime.today() - datetime.timedelta(weeks=4)
+    elif timeframe == "year":
+        time_delta = datetime.datetime.today() - datetime.timedelta(weeks=52)
     
     user = get_object_or_404(User, pk = user_id)
     
     values = default_values(request)
     
-    values["links"] = user.link_set.all().order_by("-date_submitted").filter(date_submitted__gte=one_week_ago)
+    values["links"] = user.link_set.all().order_by("-date_submitted").filter(date_submitted__gte=time_delta)
+    v = [x.total_views() for x in values["links"]]
+    values["totals"] = sum(v)
     values["user"]  = user
+    
     
     return render_to_response(
         'shortener/user/main.html',

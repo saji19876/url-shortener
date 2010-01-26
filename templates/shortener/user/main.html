@@ -3,7 +3,7 @@
 {% block title %}Short URL Report for {{ user }} {% endblock %}
 
 {% block content %}
-<h2>Link Report for {{ user }}</h2>
+<h2>Link Report for {{ user }} in Time Period {{totals}}</h2>
 {% if user.is_authenticated %}
     {% ifequal user.id request.user.id %}
         <h3>API Key: {{request.user.get_profile.api_key}}</h3>
@@ -32,7 +32,14 @@
     </tbody>
 </table>
 {% endblock %}
-
+{% block sidebar %}
+<div class="margin_top_1em margin_bottom_halfem"><em class="s4">Tools</em></div>
+<ul>
+    <li><a href="{% url user_info_none user.id,user.username %}">This week</a></li>
+    <li><a href="{% url user_info_timetable user.id,user.username,'month' %}">This month</a></li>
+    <li><a href="{% url user_info_timetable user.id,user.username,'year' %}">This year</a></li>
+</ul>
+{% endblock %}
 {% block extra_scripts %}
 <script src="{{MEDIA_URL}}/js/jquery.tablesorter.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">

@@ -84,7 +84,8 @@ class Link(models.Model):
     url = models.URLField(verify_exists=True, unique=False)
     date_submitted = models.DateTimeField(auto_now_add=True)
     main_url = models.ForeignKey("self",related_name="rollup",blank=True,null=True)
-    
+    clicks = models.IntegerField(blank=True, null=True,default=0)
+    views = models.IntegerField(blank=True, null=True,default=0) 
     def to_base62(self):
         return base62.from_decimal(self.id)
 
@@ -92,14 +93,14 @@ class Link(models.Model):
         return settings.SITE_BASE_URL + self.to_base62()
         
     def total_views(self):
-        return self.stat_set.filter(stat_type=2).count()
+        return self.clicks
         
     def total_clicks(self):
-        return self.stat_set.filter(stat_type=1).count()
+        return self.views
         
     def ctr(self):
-        clicks = float(self.total_clicks())
-        views  = float(self.total_views())
+        clicks = float(self.clicks)
+        views  = float(self.views)
         if views == 0:
             return clicks
             
