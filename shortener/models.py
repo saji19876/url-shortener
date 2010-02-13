@@ -105,6 +105,15 @@ class Link(models.Model):
             return clicks
             
         return float(clicks / views)
+
+    def ctr_w(self):
+        ctr = self.ctr()
+        if ctr <= 1:
+	    val = ctr * self.views
+	else:
+	    val = 0
+
+	return val
     
     def __unicode__(self):
         return self.to_base62() + ' : ' + self.url

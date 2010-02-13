@@ -17,6 +17,7 @@
             <th>Clicks</th>
             <th>Views</th>
             <th>CTR</th>
+            <th>CTR_w</th>
         </tr>
     </thead>
     <tbody>
@@ -27,6 +28,7 @@
                 <td>{{link.clicks}}</td>
                 <td>{{link.views}}</td>
                 <td>{{link.ctr|floatformat:2}}</td>
+                <td>{{link.ctr_w|floatformat:0}}</td>
             </tr>
         {% endfor %}
     </tbody>
