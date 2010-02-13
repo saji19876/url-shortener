@@ -146,8 +146,11 @@ def user(request,user_id = None, username =  None, timeframe = None):
     
     values["links"] = user.link_set.all().order_by("-date_submitted").filter(date_submitted__gte=time_delta)
     v = [x.views for x in values["links"]]
+    y = [x.clicks for x in values["links"]]
     values["totals"] = sum(v)
+    values["totals2"] = sum(y)
     values["user"]  = user
+    values["timeframe"]  = timeframe
     
     
     return render_to_response(

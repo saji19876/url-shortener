@@ -1,9 +1,11 @@
 {% extends "base.html" %}
+{% load humanize %}
 
-{% block title %}Short URL Report for {{ user }} {% endblock %}
+{% block title %}Short URL Report for {{ user }} in the last {{timeframe}}{% endblock %}
 
 {% block content %}
-<h2>Link Report for {{ user }} in Time Period {{totals}} {{totals2}}</h2>
+<h2 class="s3 margin_bottom_halfem">Link Report for {{ user }} in the last {{timeframe}}</h2>
+<p class="s4 margin_bottom_1em">Views: {{totals|intcomma}} Clicks: {{totals2|intcomma}}</p>
 {% if user.is_authenticated %}
     {% ifequal user.id request.user.id %}
         <h3>API Key: {{request.user.get_profile.api_key}}</h3>
@@ -11,19 +13,19 @@
 {% endif %}
 <table id="user_link_data">
     <thead>
-        <tr>
-            <th>Short</th>
+        <tr class="s5 margin_bottom_1em">
+            <th>Info</th>
             <th>Long</th>
             <th>Clicks</th>
             <th>Views</th>
             <th>CTR</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody >
         {% for link in links %}
             <tr>
-                <td>{{link.short_url}}</td>
-                <td>{{link.url|urlizetrunc:35}}</td>
+                <td style="font-family:monospace;"><a href="{{link.short_url}}+">{{link.short_url|cut:"http://"}}</a></td>
+                <td><a href="{{link.short_url}}">{{link.url|slice:":35"}}</a></td>
                 <td>{{link.clicks}}</td>
                 <td>{{link.views}}</td>
                 <td>{{link.ctr|floatformat:2}}</td>

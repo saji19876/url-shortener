@@ -82,6 +82,8 @@ class Link(models.Model):
     """
     user = models.ForeignKey(User)
     url = models.URLField(verify_exists=True, unique=False)
+    title = models.CharField(blank=True, max_length=255)
+    trys = models.IntegerField(blank=False, null=True, default=5)
     date_submitted = models.DateTimeField(auto_now_add=True)
     main_url = models.ForeignKey("self",related_name="rollup",blank=True,null=True)
     clicks = models.IntegerField(blank=True, null=True,default=0)
