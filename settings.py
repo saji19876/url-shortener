@@ -102,6 +102,7 @@ INSTALLED_APPS = (
     'urlweb.shortener',
     'registration',
     'django_authopenid',
+    'django.contrib.humanize'
 )
 
 STATIC_DOC_ROOT = os.path.join(PROJECT_PATH, 'static')
