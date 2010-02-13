@@ -11,15 +11,18 @@ class Command(BaseCommand):
         from BeautifulSoup import BeautifulSoup
         
         
-        h = httplib2.Http(None)
+        h = httplib2.Http(None,1)
         
         for link in Link.objects.filter(trys__gt=0):
             try:
                 resp, content = h.request(link.url, "GET")
+		print link.url
                 if int(resp.status) == 200:
                     soup = BeautifulSoup(content)
                     titleTag = soup.html.head.title
-                    link.title = titleTag.string
+		    titleTag = str(unicode(titleTag.string).encode('ascii','ignore'))
+		    print titleTag
+                    link.title = titleTag
                     link.trys = 0
             except:
                 pass
