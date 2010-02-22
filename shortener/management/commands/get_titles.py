@@ -16,12 +16,12 @@ class Command(BaseCommand):
         for link in Link.objects.filter(trys__gt=0):
             try:
                 resp, content = h.request(link.url, "GET")
-		print link.url
+                print link.url
                 if int(resp.status) == 200:
                     soup = BeautifulSoup(content)
                     titleTag = soup.html.head.title
-		    titleTag = str(unicode(titleTag.string).encode('ascii','ignore'))
-		    print titleTag
+                    titleTag = str(unicode(titleTag.string).encode('ascii','ignore'))
+                    print titleTag
                     link.title = titleTag
                     link.trys = 0
             except:

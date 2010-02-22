@@ -99,6 +99,14 @@ class Link(models.Model):
         
     def total_clicks(self):
         return self.views
+       
+    def title_display(self):
+        display = ""
+        if self.title:
+            display = self.title
+        else:
+            display = self.url     
+        return display 
         
     def ctr(self):
         clicks = float(self.clicks)

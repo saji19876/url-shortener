@@ -8,7 +8,7 @@ logging.basicConfig(
 )
 
 logging.debug("Reading settings...")
-
+INTERNAL_IPS = ('127.0.0.1',)
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 
 DEBUG = True
@@ -75,6 +75,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 #    'django.middleware.transaction.TransactionMiddleware',    
     'django_authopenid.middleware.OpenIDMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'urlweb.urls'
@@ -102,7 +103,8 @@ INSTALLED_APPS = (
     'urlweb.shortener',
     'registration',
     'django_authopenid',
-    'django.contrib.humanize'
+    'django.contrib.humanize',
+    'debug_toolbar'
 )
 
 STATIC_DOC_ROOT = os.path.join(PROJECT_PATH, 'static')

@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load humanize %}
-
+{%block head %}
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css" type="text/css" media="screen" title="no title" charset="utf-8">
+{% endblock %}
 {% block title %}Short URL Report for {{ user }} in the last {{timeframe}}{% endblock %}
 
 {% block content %}
@@ -14,8 +16,8 @@
 <table id="user_link_data">
     <thead>
         <tr class="s5 margin_bottom_1em">
-            <th>Info</th>
             <th>Long</th>
+            <th>Info</th>
             <th>Clicks</th>
             <th>Views</th>
             <th>CTR</th>
@@ -25,8 +27,8 @@
     <tbody >
         {% for link in links %}
             <tr>
-                <td style="font-family:monospace;"><a href="{{link.short_url}}+">{{link.short_url|cut:"http://"}}</a></td>
-                <td><a href="{{link.short_url}}">{{link.url|slice:":35"}}</a></td>
+                <td><a href="{{link.short_url}}">{{link.title_display|slice:":70"}}</a></td>
+                <td style="font-family:monospace;"><a href="{{link.short_url}}+">{{link.to_base62}}</a></td>
                 <td>{{link.clicks}}</td>
                 <td>{{link.views}}</td>
                 <td>{{link.ctr|floatformat:2}}</td>
@@ -34,6 +36,14 @@
             </tr>
         {% endfor %}
     </tbody>
+</table>
+<table>
+    {% for act in  dateActivity %}
+    <tr>
+        <td>{{act.t}} {{act.date_is}}</td>
+        <td>{{act.activity}}</td>
+    </tr>
+    {% endfor %}
 </table>
 {% endblock %}
 {% block sidebar %}
@@ -43,13 +53,27 @@
     <li><a href="{% url user_info_timetable user.id,user.username,'month' %}">This month</a></li>
     <li><a href="{% url user_info_timetable user.id,user.username,'year' %}">This year</a></li>
 </ul>
+<div class="margin_top_1em margin_bottom_halfem"><em class="s4">Date Range</em></div>
+<form method="GET" action="">
+<ul>
+    <li><label for="date_from">From Date:</label><input class="datepicker" type="text" name="date_from"></li>
+    <li><label for="date_to">To Date:</label><input class="datepicker" type="text" name="date_to"></li>
+    <li><button type="submit" value="submit">Submit</button></li>
+</ul>
+</form>
 {% endblock %}
 {% block extra_scripts %}
+
 <script src="{{MEDIA_URL}}/js/jquery.tablesorter.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://jquery-ui.googlecode.com/svn/trunk/ui/jquery.ui.core.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://jquery-ui.googlecode.com/svn/trunk/ui/jquery.ui.datepicker.js" type="text/javascript" charset="utf-8"></script>
+
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function(){ 
+        $(".datepicker").datepicker();
         $("#user_link_data").tablesorter(); 
     });
+	
 </script>
 {% endblock %}
 

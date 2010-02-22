@@ -7,7 +7,7 @@ h1,h2,h3,h4,h5,h6,p,table,div {
 a {
     color:black;
 }
-#custom-doc { width: 80%; min-width: 250px;margin:auto; }
+#custom-doc { width: 90%; min-width: 250px;margin:auto; }
 body {
     font-family:"MyriadPro-Regular","Myriad Pro Regular",MyriadPro,"Myriad Pro",Helvetica,Arial,sans-serif;
     font-weight:normal;

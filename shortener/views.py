@@ -16,6 +16,7 @@ from urlweb.shortener.baseconv import base62
 from urlweb.shortener.models import Link, LinkSubmitForm, Stat,UserProfile
 from django.contrib.auth.models import User
 from django.db.models import Count
+from django.core import serializers
 
 def follow(request, base62_id, stat_type = 1):
     """ 
@@ -133,6 +134,7 @@ def submit(request):
         
 def user(request,user_id = None, username =  None, timeframe = None):
     import datetime
+    from django.utils import simplejson
     if not timeframe:
         time_delta = datetime.datetime.today() - datetime.timedelta(weeks=1)
     elif timeframe == "month":
@@ -151,8 +153,16 @@ def user(request,user_id = None, username =  None, timeframe = None):
     values["totals2"] = sum(y)
     values["user"]  = user
     values["timeframe"]  = timeframe
+    values["dateActivity"]  = Stat.objects.filter(link__user=user).filter(date__gte=time_delta).extra(select={"t":"DATE_FORMAT(`shortener_stat`.`date`, '%%d%%m%%Y')","date_is":"`shortener_stat`.`date`"}).values('t').annotate(activity=Count('stat_type'))
     
-    
+    if 'application/json' in request.META.get('HTTP_ACCEPT', '') or request.GET.get("format", None) == "json":
+        new_values = {
+            "links":values["links"].values('clicks','views', 'url','title')
+        }
+
+        data = simplejson.dumps(new_values)
+        return HttpResponse(data,mimetype='application/json')
+        
     return render_to_response(
         'shortener/user/main.html',
         values,
