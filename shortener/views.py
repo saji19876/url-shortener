@@ -53,6 +53,9 @@ def follow(request, base62_id, stat_type = 1):
     else:
         link.views = link.views + 1
     link.save()
+    if str(stat_type) == "v":
+        return HttpResponse(content="", status=304)
+        
     return HttpResponsePermanentRedirect(link.url)
 
 def default_values(request, link_form=None):
