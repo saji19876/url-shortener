@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load compressed %}
+
 {% block head %}
-    <link rel="stylesheet" href="{{MEDIA_URL}}/css/openid.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    {% compressed_css 'openid' %}
 {% endblock %}
 {% block content %}
 <div class="yui-g">
@@ -71,13 +73,6 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script type="text/javascript" src="{{ MEDIA_URL }}/js/openid-jquery.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-    openid.init('id_openid_url');
-});
-</script>
-<!-- /Simple OpenID Selector -->
-    
+    {% compressed_js 'openid' %}
 {% endblock %}
 

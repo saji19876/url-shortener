@@ -1,12 +1,14 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
  "http://www.w3.org/TR/html4/strict.dtd">
+{% load compressed %}
 <html>
 <head>
    <title>{% block title %}url shortener tskr.us {% endblock %}</title>
    <meta name="description" content="{% block meta_description %}URLs{% endblock %}">
    <link rel="shortcut icon" href="http://www.tastestalkr.com/sites/tastestalkr.com/files/yui_grid_favicon.ico" type="image/x-icon" /> 
    <link rel="stylesheet" href="http://yui.yahooapis.com/2.7.0/build/reset-fonts-grids/reset-fonts-grids.css" type="text/css">
-   <link rel="stylesheet" href="{{MEDIA_URL}}/css/tskr.us.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    {% compressed_css 'main' %}
+	
    {% block head %}{% endblock %}
    {% block extra_head %}
    {% endblock %}
@@ -64,13 +66,7 @@
         <h2 class="s4 replace_font">a url shortener created by the <a href="http://tastestalkr.com">Tastestalkr Network</a>. Follow the developer on twitter <a href="http://twitter.com/voidfiles">@voidfiles</a></h2>
     </div>
 </div>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-<script type="text/javascript" src="http://tastestalkr.com/sites/all/modules/cufon/js/cufon-yui.js"></script>
-<script type="text/javascript" src="ChunkFive_400.font.js"></script>
-<script type="text/javascript">
-Cufon.replace(".replace_font", { "fontFamily": "ChunkFive", "hover": 0 });
-Cufon.now();
-</script>
+{% compressed_js 'base' %}
 {% block extra_scripts %}{% endblock %}
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
@@ -80,7 +76,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
 try {
 var pageTracker = _gat._getTracker("UA-197961-22");
 pageTracker._trackPageview();
-} catch(err) {}</script>
+} catch(err) {}
+</script>
 </body>
 
 </html>

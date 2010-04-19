@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load humanize %}
+{% load compressed %}
 {%block head %}
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css" type="text/css" media="screen" title="no title" charset="utf-8">
 {% endblock %}
@@ -61,19 +62,15 @@
     <li><button type="submit" value="submit">Submit</button></li>
 </ul>
 </form>
+<div class="margin_top_2em margin_bottom_halfem"><em class="s4">Delete Links Like</em></div>
+<form method="GET" action="{% url user_clean_urls_like %}">
+<ul>
+    <li><label for="date_from">URL Code:</label><input type="text" name="urlcode"></li>
+    <li><button type="submit" value="submit">Submit</button></li>
+</ul>
+</form>
 {% endblock %}
 {% block extra_scripts %}
-
-<script src="{{MEDIA_URL}}/js/jquery.tablesorter.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="http://jquery-ui.googlecode.com/svn/trunk/ui/jquery.ui.core.js" type="text/javascript" charset="utf-8"></script>
-<script src="http://jquery-ui.googlecode.com/svn/trunk/ui/jquery.ui.datepicker.js" type="text/javascript" charset="utf-8"></script>
-
-<script type="text/javascript" charset="utf-8">
-    $(document).ready(function(){ 
-        $(".datepicker").datepicker();
-        $("#user_link_data").tablesorter(); 
-    });
-	
-</script>
+    {% compressed_js 'date_picker' %}
 {% endblock %}
 
