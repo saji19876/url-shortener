@@ -213,9 +213,13 @@ def is_allowed_to_submit(request):
 
 def shorten(request,url = None):
     from django.utils import simplejson as json
-    
-    url =  request.GET.get("url", None)
-    api_key = request.GET.get("api_key", None)
+    if request.method == "GET":
+        url =  request.GET.get("url", None)
+        api_key = request.GET.get("api_key", None)
+    else:
+        url =  request.POST.get("url", None)
+        api_key = request.POST.get("api_key", None)   
+            
     if not url:
         return HttpResponseBadRequest("you need to submit a url for shortening")
         
