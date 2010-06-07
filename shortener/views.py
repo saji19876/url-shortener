@@ -178,6 +178,8 @@ def user(request,user_id = None, username =  None, timeframe = None):
     values["user"]  = user
     values["timeframe"]  = timeframe
     values["dateActivity"]  = Stat.objects.filter(link__user=user).filter(date__gte=time_delta).extra(select={"t":"DATE_FORMAT(`shortener_stat`.`date`, '%%d%%m%%Y')","date_is":"`shortener_stat`.`date`"}).values('t').annotate(activity=Count('stat_type'))
+    values["listActivity"]  = [act["activity"] for act in values["dateActivity"]]
+    values["listActivityLabels"]  = [act["t"] for act in values["dateActivity"]]
     
     if 'application/json' in request.META.get('HTTP_ACCEPT', '') or request.GET.get("format", None) == "json":
         new_values = {

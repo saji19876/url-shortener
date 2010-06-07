@@ -46,7 +46,7 @@
     </tr>
     {% endfor %}
 </table>
-<div id="holder" styl="width:300px;height:100px;">
+<div id="holder">
    
 </div>
 {% endblock %}
@@ -74,14 +74,23 @@
 </form>
 {% endblock %}
 {% block extra_scripts %}
+{% compressed_js 'graphing' %}
 {% compressed_js 'date_picker' %}
-{% compressed_js 'simplegraph' %}
+
 <script>
-window.onload = function () {   
-   $("#holder").simplegraph(
-      [{{listActivity|join:","}}], 
-      ["1","1","1","1","1","1","1"]
-   ); 
+window.onload = function () {
+    var r = Raphael("holder");
+    
+    //r.g.text(200, 100, "Week in Traffic").attr({"font-size": 20});
+    bar = r.g.barchart(
+       0, 0, 300, 100, 
+       [[ {{listActivity|join:","}} ]], 
+       0
+   )
+   console.log(bar);
+   
+   
+    
 };
 
 </script>

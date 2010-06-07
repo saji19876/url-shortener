@@ -191,6 +191,13 @@ COMPRESS_JS = {
         ),
         'output_filename': 'js/graphing_compressed.js',
     },
+    "simplegraph": {
+        'source_filenames': (
+            'js/raphael.js',
+            'js/jquery.simplegraph.js',
+        ),
+        'output_filename': 'js/simplegraph_compressed.js',
+    },
     "date_picker": {
         'source_filenames': (
             'js/jquery.ui.core.js',
