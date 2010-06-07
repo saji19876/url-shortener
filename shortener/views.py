@@ -134,7 +134,28 @@ def submit(request):
         'shortener/submit_failed.html',
         values,
         context_instance=RequestContext(request))
+ 
+@login_required    
+def user_clean_urls(request,user_id = None, username =  None):
+    from urlweb.shortener.baseconv import base62
+    
+    this_user = request.user
+    
+    if not request.method == "GET": raise Http404
+    
+    short_code = request.GET.get("urlcode", None)
+    
+
+    
+    if not short_code: raise Http404
         
+    
+    alink = get_object_or_404(Link, id = base62.to_decimal(short_code))
+    
+    all_links = this_user.link_set.filter(url=alink.url).delete()
+    
+    return user(request, this_user.id, this_user.username)
+    
 def user(request,user_id = None, username =  None, timeframe = None):
     import datetime
     from django.utils import simplejson
@@ -157,6 +178,8 @@ def user(request,user_id = None, username =  None, timeframe = None):
     values["user"]  = user
     values["timeframe"]  = timeframe
     values["dateActivity"]  = Stat.objects.filter(link__user=user).filter(date__gte=time_delta).extra(select={"t":"DATE_FORMAT(`shortener_stat`.`date`, '%%d%%m%%Y')","date_is":"`shortener_stat`.`date`"}).values('t').annotate(activity=Count('stat_type'))
+    values["listActivity"]  = [act["activity"] for act in values["dateActivity"]]
+    values["listActivityLabels"]  = [act["t"] for act in values["dateActivity"]]
     
     if 'application/json' in request.META.get('HTTP_ACCEPT', '') or request.GET.get("format", None) == "json":
         new_values = {
@@ -192,9 +215,13 @@ def is_allowed_to_submit(request):
 
 def shorten(request,url = None):
     from django.utils import simplejson as json
-    
-    url =  request.GET.get("url", None)
-    api_key = request.GET.get("api_key", None)
+    if request.method == "GET":
+        url =  request.GET.get("url", None)
+        api_key = request.GET.get("api_key", None)
+    else:
+        url =  request.POST.get("url", None)
+        api_key = request.POST.get("api_key", None)   
+            
     if not url:
         return HttpResponseBadRequest("you need to submit a url for shortening")
         

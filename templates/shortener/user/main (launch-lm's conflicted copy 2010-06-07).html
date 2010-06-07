@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load compressed %}
+{%block head %}
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css" type="text/css" media="screen" title="no title" charset="utf-8">
+{% endblock %}
+{% block title %}Short URL Report for {{ user }} in the last {{timeframe}}{% endblock %}
+
+{% block content %}
+<h2 class="s3 margin_bottom_halfem">Link Report for {{ user }} in the last {{timeframe}}</h2>
+<p class="s4 margin_bottom_1em">Views: {{totals|intcomma}} Clicks: {{totals2|intcomma}}</p>
+{% if user.is_authenticated %}
+    {% ifequal user.id request.user.id %}
+        <h3>API Key: {{request.user.get_profile.api_key}}</h3>
+    {% endifequal %}
+{% endif %}
+<table id="user_link_data">
+    <thead>
+        <tr class="s5 margin_bottom_1em">
+            <th>Long</th>
+            <th>Info</th>
+            <th>Clicks</th>
+            <th>Views</th>
+            <th>CTR</th>
+            <th>CTR_w</th>
+        </tr>
+    </thead>
+    <tbody >
+        {% for link in links %}
+            <tr>
+                <td><a href="{{link.short_url}}">{{link.title_display|slice:":70"}}</a></td>
+                <td style="font-family:monospace;"><a href="{{link.short_url}}+">{{link.to_base62}}</a></td>
+                <td>{{link.clicks}}</td>
+                <td>{{link.views}}</td>
+                <td>{{link.ctr|floatformat:2}}</td>
+                <td>{{link.ctr_w|floatformat:0}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<table>
+    {% for act in  dateActivity %}
+    <tr>
+        <td>{{act.t}} {{act.date_is}}</td>
+        <td>{{act.activity}}</td>
+    </tr>
+    {% endfor %}
+</table>
+<div id="holder">
+   
+</div>
+{% endblock %}
+{% block sidebar %}
+<div class="margin_top_1em margin_bottom_halfem"><em class="s4">Tools</em></div>
+<ul>
+    <li><a href="{% url user_info_none user.id,user.username %}">This week</a></li>
+    <li><a href="{% url user_info_timetable user.id,user.username,'month' %}">This month</a></li>
+    <li><a href="{% url user_info_timetable user.id,user.username,'year' %}">This year</a></li>
+</ul>
+<div class="margin_top_1em margin_bottom_halfem"><em class="s4">Date Range</em></div>
+<form method="GET" action="">
+<ul>
+    <li><label for="date_from">From Date:</label><input class="datepicker" type="text" name="date_from"></li>
+    <li><label for="date_to">To Date:</label><input class="datepicker" type="text" name="date_to"></li>
+    <li><button type="submit" value="submit">Submit</button></li>
+</ul>
+</form>
+<div class="margin_top_2em margin_bottom_halfem"><em class="s4">Delete Links Like</em></div>
+<form method="GET" action="{% url user_clean_urls_like %}">
+<ul>
+    <li><label for="date_from">URL Code:</label><input type="text" name="urlcode"></li>
+    <li><button type="submit" value="submit">Submit</button></li>
+</ul>
+</form>
+{% endblock %}
+{% block extra_scripts %}
+{% compressed_js 'graphing' %}
+{% compressed_js 'date_picker' %}
+
+<script>
+window.onload = function () {
+    var r = Raphael("holder");
+    
+    //r.g.text(200, 100, "Week in Traffic").attr({"font-size": 20});
+    bar = r.g.barchart(
+       0, 0, 300, 100, 
+       [[ {{listActivity|join:","}} ]], 
+       0
+   )
+   console.log(bar);
+   
+   
+    
+};
+
+</script>
+{% endblock %}
+

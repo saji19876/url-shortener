@@ -47,12 +47,12 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.join(PROJECT_PATH, 'static')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/static'
+MEDIA_URL = '/static/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -104,12 +104,14 @@ INSTALLED_APPS = (
     'registration',
     'django_authopenid',
     'django.contrib.humanize',
-#    'debug_toolbar'
+    'compress'
 )
+
+COMPRESS_CSS_FILTERS = None
 
 STATIC_DOC_ROOT = os.path.join(PROJECT_PATH, 'static')
 LOGIN_REDIRECT_URL = '/'
-
+LOGIN_URL = "/account/signin/"
 #TEMPLATE_CONTEXT_PROCESSORS += (
 #    'django.core.context_processors.request',
 #    ) 
@@ -118,6 +120,95 @@ SITE_NAME = 'localhost:8000'
 SITE_BASE_URL = 'http://' + SITE_NAME + '/'
 REQUIRE_LOGIN = True
 
+
+
+COMPRESS_CSS = {
+    'main': {
+        'source_filenames': (
+            'css/tskr.us.css',
+        ),
+        'output_filename': 'css/main_compressed.css',
+        'extra_context': {
+            'media': 'screen,projection',
+        },
+    },
+    'openid': {
+        'source_filenames': (
+            'css/openid.css',
+        ),
+        'output_filename': 'css/openid_compressed.css',
+        'extra_context': {
+            'media': 'screen,projection',
+        },
+    },
+    
+    # other CSS groups goes here
+}
+
+COMPRESS_JS = {
+    'all': {
+        'source_filenames': (
+            'js/jquery.min.js',
+            'js/jquery.tablesorter.min.js',
+            'js/openid-jquery.js',
+            'js/font/cufon-yui.js',
+            'js/font/ChunkFive_400.font.js',
+            'js/raphael-min.js',
+            'js/g.raphael/g.raphael.js',
+            'js/g.raphael/g.bar.js',
+            'js/g.raphael/g.dot.js',
+            'js/g.raphael/g.line.js',
+            'js/g.raphael/g.pie.js',            
+        ),
+        'output_filename': 'js/all_compressed.js',
+    },
+    "base":{
+        'source_filenames': (
+            'js/jquery.min.js',
+            'js/jquery.tablesorter.min.js',
+            'js/font/cufon-yui.js',
+            'js/font/ChunkFive_400.font.js'        
+        ),
+        'output_filename': 'js/base_compressed.js',
+    },
+    "openid": {
+        'source_filenames': (
+            'js/openid-jquery.js',
+            'js/base_openid.js'
+            
+        ),
+        'output_filename': 'js/openid_compressed.js',
+    },
+    "graphing": {
+        'source_filenames': (
+            'js/raphael-min.js',
+            'js/g.raphael/g.raphael.js',
+            'js/g.raphael/g.bar.js',
+            'js/g.raphael/g.dot.js',
+            'js/g.raphael/g.line.js',
+            'js/g.raphael/g.pie.js',
+        ),
+        'output_filename': 'js/graphing_compressed.js',
+    },
+    "simplegraph": {
+        'source_filenames': (
+            'js/raphael.js',
+            'js/jquery.simplegraph.js',
+        ),
+        'output_filename': 'js/simplegraph_compressed.js',
+    },
+    "date_picker": {
+        'source_filenames': (
+            'js/jquery.ui.core.js',
+            'js/jquery.ui.datepicker.js',
+            'js/date_base.js'
+        ),
+        'output_filename': 'js/date_picker_compressed.js',
+    }
+}
+COMPRESS = True
+COMPRESS_AUTO = True
+ACCOUNT_ACTIVATION_DAYS = 5
 try:
     from local_settings import *
 except ImportError:

@@ -19,8 +19,10 @@ urlpatterns = patterns(
     (r'^(?P<base62_id>[A-z0-9]+)\+$', myview),
     (r'^info/(?P<base62_id>\w+)$', 'shortener.views.info',[],"info"),   
     (r'^(?P<stat_type>v)/(?P<base62_id>\w+)$', 'shortener.views.follow'),
+    (r'^clean-url/$', 'shortener.views.user_clean_urls',[], 'user_clean_urls_like'),
     (r'^(?P<user_id>\d+)/(?P<username>\w+)$', 'shortener.views.user',[], 'user_info_none'),
-    (r'^(?P<user_id>\d+)/(?P<username>[^/]+)/(?P<timeframe>\w+)$', 'shortener.views.user',[], 'user_info_timetable'),
+    (r'^(?P<user_id>\d+)/(?P<username>[^/]+)/(?P<timeframe>\w+)$', 'shortener.views.user_clean_urls',[], 'user_info_timetable'),
+    
     
     # API
     (r'^api/v1/shorten$', 'shortener.views.shorten'),

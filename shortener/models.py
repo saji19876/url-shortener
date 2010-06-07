@@ -81,7 +81,7 @@ class Link(models.Model):
 
     """
     user = models.ForeignKey(User)
-    url = models.URLField(verify_exists=True, unique=False)
+    url = models.TextField(unique=False)
     title = models.CharField(blank=True, max_length=255)
     trys = models.IntegerField(blank=False, null=True, default=5)
     date_submitted = models.DateTimeField(auto_now_add=True)
