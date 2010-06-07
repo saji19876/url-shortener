@@ -75,7 +75,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 #    'django.middleware.transaction.TransactionMiddleware',    
     'django_authopenid.middleware.OpenIDMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+#    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'urlweb.urls'
@@ -104,7 +104,7 @@ INSTALLED_APPS = (
     'registration',
     'django_authopenid',
     'django.contrib.humanize',
-    'debug_toolbar'
+#    'debug_toolbar'
 )
 
 STATIC_DOC_ROOT = os.path.join(PROJECT_PATH, 'static')
