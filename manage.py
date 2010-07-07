@@ -1,4 +1,4 @@
-#!./env_urlweb/bin/python
+#! /home/tastestalkr/opt/bin/python
 from django.core.management import execute_manager
 try:
     import settings # Assumed to be in the same directory.
