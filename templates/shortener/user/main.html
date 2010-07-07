@@ -7,8 +7,15 @@
 {% block title %}Short URL Report for {{ user }} in the last {{timeframe}}{% endblock %}
 
 {% block content %}
-<h2 class="s3 margin_bottom_halfem">Link Report for {{ user }} in the last {{timeframe}}</h2>
-<p class="s4 margin_bottom_1em">Views: {{totals|intcomma}} Clicks: {{totals2|intcomma}}</p>
+<div class="yui-g">
+   <div class="yui-u first">
+      <h2 class="s3 margin_bottom_halfem">Link Report for {{ user }} in the last {{timeframe}}</h2>
+      <p class="s4 margin_bottom_1em">Views: {{totals|intcomma}} Clicks: {{totals2|intcomma}}</p>
+   </div>
+   <div class="yui-u">
+      <div id="holder"></div>
+   </div>
+</div>
 {% if user.is_authenticated %}
     {% ifequal user.id request.user.id %}
         <h3>API Key: {{request.user.get_profile.api_key}}</h3>
@@ -46,9 +53,6 @@
     </tr>
     {% endfor %}
 </table>
-<div id="holder" styl="width:300px;height:100px;">
-   
-</div>
 {% endblock %}
 {% block sidebar %}
 <div class="margin_top_1em margin_bottom_halfem"><em class="s4">Tools</em></div>
@@ -75,13 +79,46 @@
 {% endblock %}
 {% block extra_scripts %}
 {% compressed_js 'date_picker' %}
-{% compressed_js 'simplegraph' %}
+{% compressed_js 'protoviz' %}
 <script>
-window.onload = function () {   
-   $("#holder").simplegraph(
-      [{{listActivity|join:","}}], 
-      ["1","1","1","1","1","1","1"]
-   ); 
+window.onload = function () {
+   var activity = [{{listActivity|join:","}}],
+       labels   = ['{{listActivityLabels|join:"','"}}'],
+       biggest = 0,
+       width=400,
+       height=90,
+       i,
+       inverseActivity = [];
+   for(i in activity){
+      if(activity[i] > biggest){
+         biggest = activity[i];
+      }
+      inverseActivity[activity[i]] = i;
+   }
+   var yScale = pv.Scale.linear(0, biggest).range(0, height),
+       xScale = pv.Scale.ordinal(pv.range(activity.length)).splitBanded(0, width, 4/5);
+   
+   var viz = new pv.Panel()
+      .width(width)
+      .height(height)
+      .left(0)
+      .bottom(0)
+      .canvas("holder");
+      
+   var bar = viz.add(pv.Bar)
+      .data(activity)
+      .height(yScale)
+      .width(xScale.range().band)
+      .bottom(15)
+      .left(function(d){ return xScale(this.index); })
+      
+   bar.anchor("bottom").add(pv.Label)
+       .textMargin(5)
+       .textBaseline("top")
+       .text(function() labels[this.index]);
+
+   viz.render();
+
 };
 
 </script>
