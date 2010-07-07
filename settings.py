@@ -204,6 +204,12 @@ COMPRESS_JS = {
             'js/date_base.js'
         ),
         'output_filename': 'js/date_picker_compressed.js',
+    },
+    "protoviz":{
+        'source_filenames':(
+            'js/protovis-d3.2.js',
+        ),
+        'output_filename': 'js/protoviz_compressed.js',
     }
 }
 COMPRESS = True
